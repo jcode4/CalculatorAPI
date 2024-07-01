@@ -31,7 +31,7 @@ Should be running locally on:
 
 
 Additional testing data information:
-When testing the store endpoint like to ideally have following test data input(need to enter test data twice to perform a calculation on two numbers with same Supplier and location but different location and postion test data input:
+When testing the store endpoint like to ideally have following test data input(need to enter test data twice to perform a calculation on two numbers with same Supplier and location but different number and postion test data input:
 Example:
 {
   "Location": "Greenville",
