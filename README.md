@@ -28,3 +28,21 @@ Check CalculatorAPI\Properties\launchSettings.json for localhost URL
 Should be running locally on:
  "applicationUrl": "[https://localhost:7191/swagger](https://localhost:7191/swagger/index.html);
  or http://localhost:5223/swagger/index.html"
+
+
+Additional testing data information:
+When testing the store endpoint like to ideally have following test data input(need to enter test data twice to perform a calculation on two numbers with same Supplier and location but different location and postion test data input:
+Example:
+{
+  "Location": "Greenville",
+  "Number": 7,
+  "Supplier": "User A",
+  "Position": 1
+}
+
+
+When testing the calculate/{location}/{operation} enpoint point like to ideally have following test data input(operation test data input options: add, subtract, multiply, divide):
+
+Example:
+location: Greenville
+operation: add
