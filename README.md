@@ -31,18 +31,19 @@ Should be running locally on:
 
 
 Additional testing data information:
-When testing the store endpoint like to ideally have following test data input(need to enter test data twice to perform a calculation on two numbers with same Supplier and location but different number and postion test data input:
-Example:
-{
-  "Location": "Greenville",
-  "Number": 7,
-  "Supplier": "User A",
-  "Position": 1
-}
-
-
-When testing the calculate/{location}/{operation} enpoint point like to ideally have following test data input(operation test data input options: add, subtract, multiply, divide):
+When testing the setFirstNumber/{location} & setSecondNumber/{location} endpoints like to ideally have following test data input:
 
 Example:
-location: Greenville
-operation: add
+location: user a
+number: 7
+  
+
+
+When testing the calculation/{location} endpoint point like to ideally have following test data input:
+
+Example:
+location: user a
+
+provide one of the following for Add,Subtract,Multiply, Divide have to be in uppercase
+Example
+operation: Add
