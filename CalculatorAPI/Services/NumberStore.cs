@@ -5,75 +5,44 @@ using CalculatorAPI.Models;
 
 namespace CalculatorAPI.Services
 {
-    
+    // NumberStore.cs
     public class NumberStore : INumberStore
     {
-        private readonly Dictionary<string, List<(double Number, string Supplier, int Position)>> _storedNumbers;
+        private Dictionary<string, List<double>> _numbers = new Dictionary<string, List<double>>();
 
-        public NumberStore()
+        public void StoreNumber(string location, double number, int position)
         {
-            _storedNumbers = new Dictionary<string, List<(double, string, int)>>();
-        }
-
-        // Example: StoreNumber("Seattle", 5.0, "UserA", 1);
-        public void StoreNumber(NumberRequestModel model)
-        {
-            if (!_storedNumbers.ContainsKey(model.Location))
+            if (!_numbers.ContainsKey(location))
             {
-                _storedNumbers[model.Location] = new List<(double, string, int)>();
+                _numbers[location] = new List<double>();
             }
 
-            _storedNumbers[model.Location].Add((model.Number, model.Supplier, model.Position));
-        }
-
-        public List<(double Number, string Supplier, int Position)> GetNumbersForLocation(string location)
-        {
-            return _storedNumbers.ContainsKey(location) ? _storedNumbers[location] : new List<(double, string, int)>();
-        }
-
-        public void ClearNumbersForLocation(string location)
-        {
-            if (_storedNumbers.ContainsKey(location))
+            // Ensure list is large enough to store at 'position'
+            while (_numbers[location].Count <= position)
             {
-                _storedNumbers.Remove(location);
+                _numbers[location].Add(0);
+            }
+
+            _numbers[location][position] = number;
+        }
+
+        public void ClearNumbers(string location)
+        {
+            if (_numbers.ContainsKey(location))
+            {
+                _numbers[location].Clear();
             }
         }
 
-        public double CalculateForLocation(string location, ICalculator calculator, string operation)
+        public (double, double) GetNumbers(string location)
         {
-            var numbers = GetNumbersForLocation(location);
-
-            if (numbers.Count < 2)
+            if (_numbers.ContainsKey(location) && _numbers[location].Count >= 2)
             {
-                // Handle insufficient numbers (you can customize the error message)
-                return double.NaN; // or throw a custom exception
+                return (_numbers[location][0], _numbers[location][1]);
             }
 
-            var lastIndex = numbers.Count - 1;
-            var lastRecord = numbers[lastIndex];
-            var previousRecord = numbers[lastIndex - 1]; // Get the second-to-last item
-
-            // Use the actual values from the records
-            var lastValue = lastRecord.Number;
-            var previousValue = previousRecord.Number;
-
-            // Perform the operation based on the input
-            switch (operation)
-            {
-                case "add":
-                    return calculator.Add(previousValue, lastValue, location);
-                case "subtract":
-                    return calculator.Subtract(previousValue, lastValue, location);
-                case "multiply":
-                    return calculator.Multiply(previousValue, lastValue, location);
-                case "divide":
-                    return calculator.Divide(previousValue, lastValue, location);
-                default:
-                    throw new ArgumentException("Invalid operation specified.");
-            }
+            return (0, 0);
         }
-
-      
-
     }
+
 }

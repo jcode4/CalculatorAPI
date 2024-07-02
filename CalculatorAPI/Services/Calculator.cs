@@ -1,6 +1,7 @@
 ﻿using CalculatorAPI.Interfaces;
 namespace CalculatorAPI.Services
 {
+    // Calculator.cs
     public class Calculator : ICalculator
     {
         private readonly INumberStore _numberStore;
@@ -9,34 +10,44 @@ namespace CalculatorAPI.Services
         {
             _numberStore = numberStore;
         }
-        public double Add(double x, double y, string location) 
-        {
-            var numbers = _numberStore.GetNumbersForLocation(location);
-            // Perform the addition using the retrieved numbers.
-            return x + y;
-        }
-        public double Subtract(double x, double y, string location) 
-        {
-            var numbers = _numberStore.GetNumbersForLocation(location);
 
-            return x - y;
-        }
-        public double Multiply(double x, double y, string location)
+        public List<string> GetAvailableOperations(string location)
         {
-            var numbers = _numberStore.GetNumbersForLocation(location);
+            var operations = new List<string>();
+            var (num1, num2) = _numberStore.GetNumbers(location);
 
-            return x * y;
-        }
-        public double Divide(double x, double y, string location)
-        {
-            var numbers = _numberStore.GetNumbersForLocation(location);
-
-            if (y == 0)
+            if (num1 != 0 && num2 != 0)
             {
-                throw new DivideByZeroException("Cannot divide by zero.");
+                operations.Add("Add");
+                operations.Add("Subtract");
+                operations.Add("Multiply");
+                if (num2 != 0)
+                    operations.Add("Divide");
             }
-            return x / y;
 
+            return operations;
+        }
+
+        public double PerformCalculation(string location, string operation)
+        {
+            var (num1, num2) = _numberStore.GetNumbers(location);
+
+            switch (operation)
+            {
+                case "Add":
+                    return num1 + num2;
+                case "Subtract":
+                    return num1 - num2;
+                case "Multiply":
+                    return num1 * num2;
+                case "Divide":
+                    if (num2 != 0)
+                        return num1 / num2;
+                    else
+                        throw new ArgumentException("Cannot divide by zero");
+                default:
+                    throw new ArgumentException("Invalid operation");
+            }
         }
     }
 }
