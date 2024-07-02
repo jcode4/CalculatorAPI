@@ -33,8 +33,8 @@ namespace CalculatorAPI.Controllers
             return _calculator.GetAvailableOperations(location);
         }
 
-        [HttpPost("doMath/{location}")]
-        public ActionResult<double> DoMath(string location, string operation)
+        [HttpPost("calculation/{location}")]
+        public ActionResult<double> calculation(string location, string operation)
         {
             return _calculator.PerformCalculation(location, operation);
         }
