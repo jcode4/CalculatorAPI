@@ -20,23 +20,39 @@ namespace CalculatorAPI.Controllers
         }
 
         [HttpPost("setFirstNumber/{location}")]
-        public ActionResult<List<string>> SetFirstNumber(string location, double number)
+        [Produces("application/json")]
+        public ActionResult<List<string>> SetFirstNumber(string location, [FromBody] double number)
         {
             _numberStore.StoreNumber(location, number, 0);
             return _calculator.GetAvailableOperations(location);
         }
 
+
         [HttpPost("setSecondNumber/{location}")]
-        public ActionResult<List<string>> SetSecondNumber(string location, double number)
+        [Produces("application/json")] // Specify JSON response
+        public ActionResult<List<string>> SetSecondNumber(string location, [FromBody] double number)
         {
+            Console.WriteLine($"Setting second number {number} for location {location}");
             _numberStore.StoreNumber(location, number, 1);
-            return _calculator.GetAvailableOperations(location);
+            var operations = _calculator.GetAvailableOperations(location);
+            Console.WriteLine($"Allowed operations after setting second number: {string.Join(",", operations)}");
+            return operations;
         }
 
         [HttpPost("calculation/{location}")]
-        public ActionResult<double> calculation(string location, string operation)
+       // [Produces("application/json")] // Specify JSON response
+        public ActionResult<double> Calculation(string location, [FromBody] string operation)
         {
-            return _calculator.PerformCalculation(location, operation);
+            try
+            {
+                return _calculator.PerformCalculation(location, operation);
+            }
+            catch (Exception ex)
+            {
+                // Log exception or handle as needed
+                Console.WriteLine($"Error in calculation for location {location}: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
         }
     }
 
